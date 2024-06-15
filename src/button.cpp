@@ -3,14 +3,13 @@
 
 // GPIO 0 -> D3 NodeMCU
 const int buttonPin = 0;
-const int buttonLongPressedTime = 3000; // ms
+const int buttonLongPressedTime = 1500; // ms
 
 volatile bool buttonPressed = false;
 volatile bool buttonLongPressed = false;
 volatile unsigned long buttonPressStartTime = 0;
 
 IRAM_ATTR void handleButtonInterrupt();
-
 
 void buttonInit(void)
 {
@@ -36,7 +35,6 @@ IRAM_ATTR void handleButtonInterrupt() {
     } else { 
         unsigned long pressDuration = millis() - buttonPressStartTime; 
         if (pressDuration >= buttonLongPressedTime) {
-            Serial.print("Button long pressed!");
             buttonLongPressed = true;
         } else {
             buttonPressed = true;
