@@ -7,26 +7,13 @@
 #define FILE_NAME_DEVICE_NAME           "/device_name.txt"
 #define FILE_NAME_DEVICE_INTERVAL       "/device_interval.txt"
 
-static std::string device_name;
-static std::string device_interval;
+static std::string device_name = DEFAULT_STR_DEVICE_NAME;
+static std::string device_interval = DEFAULT_STR_DEVICE_INTERVAL;
 
 static bool mem_initialized = false;
 
 static bool writeToFile(const char *filename, std::string str);
 static bool readFromFile(const char *filename, std::string &str);
-
-// void printHexFromString(std::string str)
-// {
-//     for (char c : str) {
-//         Serial.print("0x");
-//         if ((unsigned char)c < 0x10) { // Dodaj wiodące zero, jeśli potrzeba
-//             Serial.print("0");
-//         }
-//         Serial.print((unsigned char)c, HEX);
-//         Serial.print(" ");
-//     }
-//     Serial.println();
-// }
 
 void initMemFlash(void)
 {
@@ -37,7 +24,6 @@ void initMemFlash(void)
     mem_initialized = true;
     Serial.println("Memory Flash initialized");
 
-    // set defaults if memory is empty
     if(!readFromFile(FILE_NAME_DEVICE_NAME, device_name))
     {
         device_name = DEFAULT_STR_DEVICE_NAME;
@@ -51,6 +37,45 @@ void initMemFlash(void)
     }
 
 }
+
+void setDeviceName(std::string name)
+{
+    device_name = name;
+    writeToFile(FILE_NAME_DEVICE_NAME, device_name);
+}
+
+void setDeviceInterval(unsigned int interval)
+{
+    device_interval = std::to_string(interval);
+    writeToFile(FILE_NAME_DEVICE_INTERVAL, device_interval);
+}
+
+std::string getDeviceName()
+{
+    return device_name;
+}
+
+unsigned int getDeviceInterval()
+{
+    return std::stoul(device_interval);
+}
+
+// void testMemFlash()
+// {
+//     Serial.println("1. dev name");
+//     Serial.println(getDeviceName().c_str());
+//     Serial.println("1. dev interval");
+//     Serial.println(getDeviceInterval());
+
+//     std::string new_name = "myNewName";
+//     setDeviceName(new_name);
+//     setDeviceInterval(500);
+
+//     Serial.println("2. dev name");
+//     Serial.println(getDeviceName().c_str());
+//     Serial.println("2. dev interval");
+//     Serial.println(getDeviceInterval());
+// }
 
 static bool writeToFile(const char *filename, std::string str)
 {

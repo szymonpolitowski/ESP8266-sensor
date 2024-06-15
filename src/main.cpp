@@ -8,8 +8,9 @@ void setup() {
   while(!Serial);
 
   Serial.println("Hello, ESP8266!");
-  
+
   initMemFlash();
+
   // appWifiWebServer();
 
 }
