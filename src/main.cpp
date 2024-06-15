@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "app_wifi_web.hpp"
+#include "mem_flash.hpp"
 
 void setup() {
   delay(100);
@@ -8,7 +9,8 @@ void setup() {
 
   Serial.println("Hello, ESP8266!");
   
-  appWifiWebServer();
+  initMemFlash();
+  // appWifiWebServer();
 
 }
 
