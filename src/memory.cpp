@@ -12,11 +12,21 @@ static std::string device_interval;
 
 static bool mem_initialized = false;
 
-// static bool getDeviceNameFromMemory(std::string &name);
-// static bool getDeviceIntervalFromMemory(std::string &interval);
-
 static bool writeToFile(const char *filename, std::string str);
 static bool readFromFile(const char *filename, std::string &str);
+
+// void printHexFromString(std::string str)
+// {
+//     for (char c : str) {
+//         Serial.print("0x");
+//         if ((unsigned char)c < 0x10) { // Dodaj wiodące zero, jeśli potrzeba
+//             Serial.print("0");
+//         }
+//         Serial.print((unsigned char)c, HEX);
+//         Serial.print(" ");
+//     }
+//     Serial.println();
+// }
 
 void initMemFlash(void)
 {
@@ -39,7 +49,6 @@ void initMemFlash(void)
         device_interval = DEFAULT_STR_DEVICE_INTERVAL;
         writeToFile(FILE_NAME_DEVICE_INTERVAL, device_interval);
     }
-        
 
 }
 
@@ -71,14 +80,15 @@ static bool readFromFile(const char *filename, std::string &str)
         while (file.available()) 
         {
             char c = file.read();
-            str += c;
+            if(c != '\r' && c != '\n')
+                str += c;
         }
         file.close();
         Serial.print("File ");
         Serial.print(filename);
         Serial.print(": ");
         Serial.println(str.c_str());
-        
+
         return true;
     }
     else 
@@ -90,85 +100,3 @@ static bool readFromFile(const char *filename, std::string &str)
 
     return false;
 }
-
-
-
-// bool setDeviceNameToMemory(std::string name)
-// {
-//     if(!mem_initialized) return false;
-
-//     File file = LittleFS.open("/device_name.txt", "w");
-//     if (!file) {
-//         Serial.println("Error opening file device_name.txt for writing");
-//         return false;
-//     }
-//     file.println(name.c_str());
-//     file.close();
-    
-//     return true;
-// }
-
-// bool setDeviceIntervalToMemory(std::string interval)
-// {
-//     if(!mem_initialized) return false;
-
-//     File file = LittleFS.open("/device_interval.txt", "w");
-//     if (!file) {
-//         Serial.println("Error opening file device_interval.txt for writing");
-//         return false;
-//     }
-//     file.println(interval.c_str());
-//     file.close();
-    
-//     return true;
-// }
-
-// bool getDeviceNameFromMemory(std::string &name)
-// {
-//     if(!mem_initialized) return false;
-
-//     File file = LittleFS.open("/device_name.txt", "r");
-//     if (file) 
-//     {
-//         name.clear();
-//         while (file.available()) 
-//         {
-//             char c = file.read();
-//             name += c;
-//         }
-//         file.close();
-//         Serial.print("File device_name.txt: ");
-//         Serial.println(name.c_str());
-//     }
-//     else 
-//     {
-//         Serial.println("Error opening file for reading");
-//     }
-
-//     return true;
-// }
-
-// bool getDeviceIntervalFromMemory(std::string &interval)
-// {
-//     if(!mem_initialized) return false;
-
-//     File file = LittleFS.open("/device_interval.txt", "r");
-//     if (file) 
-//     {
-//         interval.clear();
-//         while (file.available()) 
-//         {
-//             char c = file.read();
-//             interval += c;
-//         }
-//         file.close();
-//         Serial.print("File device_interval.txt: ");
-//         Serial.println(interval.c_str());
-//     }
-//     else 
-//     {
-//         Serial.println("Error opening file for reading");
-//     }
-
-//     return true;
-// }
