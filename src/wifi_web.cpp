@@ -1,6 +1,7 @@
 #include "wifi_web.hpp"
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
+#include "mem_flash.hpp"
 
 const char* ssid = "ESP8266_AP";
 const char* password = "12345678";
@@ -50,26 +51,53 @@ static void initWifiAccessPoint(void)
 }
 
 static void handleRoot() {
-    String html = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>ESP8266 AP</title></head><body><h1>Welcome to ESP8266 Access Point</h1><form action=\"/submit\" method=\"POST\"><label for=\"field1\">Field 1:</label><input type=\"text\" id=\"field1\" name=\"field1\"><br><br><label for=\"field2\">Field 2:</label><input type=\"text\" id=\"field2\" name=\"field2\"><br><br><input type=\"submit\" value=\"Submit\"></form><br><button onclick=\"location.href='/shutdown'\">Shutdown Server</button></body></html>";
+
+    String html = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>";
+    html += "<meta name='viewport' content='width=device-width, initial-scale=1.0'>";
+    html += "<title>ESP8266 AP</title></head><body>";
+    html += "<h1>Welcome to ESP8266 Access Point</h1>";
+    html += "<form action=\"/submit\" method=\"POST\">";
+    html += "<label for=\"field_dev_name\">Device name: </label>";
+    html += "<input type=\"text\" id=\"field_dev_name\" name=\"field_dev_name\"><br><br>";
+    html += "<label for=\"field_dev_interval\">Interval seconds: </label>";
+    html += "<input type=\"text\" id=\"field_dev_interval\" name=\"field_dev_interval\"><br><br>";
+    html += "<input type=\"submit\" value=\"Submit\">";
+    html += "</form><br>";
+    html += "<button onclick=\"location.href='/shutdown'\">Shutdown Server</button>";
+    html += "</body></html>";
+
     server.send(200, "text/html", html);
 }
 
-// static void handleButton() {
-//     Serial.println("Button was clicked!");
-//     server.send(200, "text/html", "<p>Button was clicked!</p>");
-// }
-
 static void handleSubmit() {
+
+    String temp_device_name;
+    String temp_device_interval;
+
     if (server.method() == HTTP_POST) {
-        String field1 = server.arg("field1");
-        String field2 = server.arg("field2");
-        Serial.println("Field 1: " + field1);
-        Serial.println("Field 2: " + field2);
-        String response = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>ESP8266 AP</title></head><body><h1>Data Received</h1><p>Field 1: " + field1 + "</p><p>Field 2: " + field2 + "</p><button onclick=\"location.href='/'\">Go to Main Page</button><button onclick=\"location.href='/shutdown'\">Shutdown Server</button></body></html>";
+        temp_device_name = server.arg("field_dev_name");
+        temp_device_interval = server.arg("field_dev_interval");
+        Serial.println("WebServer Device name: " + temp_device_name);
+        Serial.println("WebServer Device interval: " + temp_device_interval);
+
+        String response = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>";
+        response += "<meta name='viewport' content='width=device-width, initial-scale=1.0'>";
+        response += "<title>ESP8266 AP</title></head><body>";
+        response += "<h1>Data Received</h1>";
+        response += "<p>Device name: " + temp_device_name + "</p>";
+        response += "<p>Interval seconds: " + temp_device_interval + "</p>";
+        response += "<button onclick=\"location.href='/'\">Go to Main Page</button>";
+        response += "<button onclick=\"location.href='/shutdown'\">Shutdown Server</button>";
+        response += "</body></html>";
+
         server.send(200, "text/html", response);
     } else {
         server.send(405, "text/html", "<h1>405 Method Not Allowed</h1>");
     }
+
+    setDeviceName(std::string(temp_device_name.c_str()));
+    setDeviceInterval(std::stoul(std::string(temp_device_interval.c_str())));
+
 }
 
 static void handleShutdown() {

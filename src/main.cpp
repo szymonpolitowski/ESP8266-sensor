@@ -11,7 +11,7 @@ void setup() {
 
   initMemFlash();
 
-  // appWifiWebServer();
+  appWifiWebServer();
 
 }
 
