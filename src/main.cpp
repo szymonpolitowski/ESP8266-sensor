@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "wifi_web.hpp"
+#include "button.hpp"
 
 void setup() {
   delay(100);
@@ -7,7 +8,8 @@ void setup() {
   while(!Serial);
 
   Serial.println("Hello, ESP8266!");
-  
+  buttonInit();
+
   initWifiWebServer();
   while(loopWifiWebServer());
 }

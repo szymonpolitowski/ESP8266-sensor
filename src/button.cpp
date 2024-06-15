@@ -9,7 +9,7 @@ volatile bool buttonPressed = false;
 volatile bool buttonLongPressed = false;
 volatile unsigned long buttonPressStartTime = 0;
 
-static void handleButtonInterrupt();
+IRAM_ATTR void handleButtonInterrupt();
 
 
 void buttonInit(void)
@@ -20,17 +20,23 @@ void buttonInit(void)
 
 bool isButtonLongPressed(void)
 {
-    return buttonLongPressed;
+    if(buttonLongPressed)
+    {
+        buttonLongPressed = false;
+        return true;
+    }
+    
+    return false;
 }
 
 
-static void handleButtonInterrupt() {
+IRAM_ATTR void handleButtonInterrupt() {
     if (digitalRead(buttonPin) == LOW) { 
         buttonPressStartTime = millis();
     } else { 
         unsigned long pressDuration = millis() - buttonPressStartTime; 
         if (pressDuration >= buttonLongPressedTime) {
-            Serial.println("Button pressed for long time");
+            Serial.print("Button long pressed!");
             buttonLongPressed = true;
         } else {
             buttonPressed = true;
