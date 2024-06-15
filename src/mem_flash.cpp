@@ -3,12 +3,18 @@
 
 #define DEFAULT_STR_DEVICE_NAME         "ESP-Sensor"
 #define DEFAULT_STR_DEVICE_INTERVAL     "300"
+#define DEFAULT_STR_WIFI_SSID           "YourWifiSSID"
+#define DEFAULT_STR_WIFI_PASS           "TopSecretPassword"
 
 #define FILE_NAME_DEVICE_NAME           "/device_name.txt"
 #define FILE_NAME_DEVICE_INTERVAL       "/device_interval.txt"
+#define FILE_NAME_WIFI_SSID             "/device_wifi_ssid.txt"
+#define FILE_NAME_WIFI_PASS             "/device_wifi_pass.txt"
 
 static std::string device_name = DEFAULT_STR_DEVICE_NAME;
 static std::string device_interval = DEFAULT_STR_DEVICE_INTERVAL;
+static std::string wifi_ssid = DEFAULT_STR_WIFI_SSID;
+static std::string wifi_pass = DEFAULT_STR_WIFI_PASS;
 
 static bool mem_initialized = false;
 
@@ -36,6 +42,18 @@ void initMemFlash(void)
         writeToFile(FILE_NAME_DEVICE_INTERVAL, device_interval);
     }
 
+    if(!readFromFile(FILE_NAME_WIFI_SSID, wifi_ssid))
+    {
+        wifi_ssid = DEFAULT_STR_WIFI_SSID;
+        writeToFile(FILE_NAME_WIFI_SSID, wifi_ssid);
+    }
+
+    if(!readFromFile(FILE_NAME_WIFI_PASS, wifi_pass))
+    {
+        wifi_pass = DEFAULT_STR_WIFI_PASS;
+        writeToFile(FILE_NAME_WIFI_PASS, wifi_pass);
+    }
+
 }
 
 void setDeviceName(std::string name)
@@ -45,9 +63,20 @@ void setDeviceName(std::string name)
 }
 
 void setDeviceInterval(unsigned int interval)
-{
+{   
     device_interval = std::to_string(interval);
     writeToFile(FILE_NAME_DEVICE_INTERVAL, device_interval);
+}
+
+void setWiFiSSID(std::string ssid)
+{
+    wifi_ssid = ssid;
+    writeToFile(FILE_NAME_WIFI_SSID, wifi_ssid);
+}
+void setWiFiPassword(std::string pass)
+{
+    wifi_pass = pass;
+    writeToFile(FILE_NAME_WIFI_PASS, wifi_pass);
 }
 
 std::string getDeviceName()
@@ -58,6 +87,15 @@ std::string getDeviceName()
 unsigned int getDeviceInterval()
 {
     return std::stoul(device_interval);
+}
+
+std::string getWiFiSSID()
+{
+    return wifi_ssid;
+}
+std::string getWiFiPassword()
+{
+    return wifi_pass;
 }
 
 // void testMemFlash()
