@@ -56,6 +56,8 @@ static void handleRoot()
     String intervalStr = String(std::to_string(getDeviceInterval()).c_str());
     String ssidStr = String(getWiFiSSID().c_str());
     String passStr = String(getWiFiPassword().c_str());
+    String mqttServerStr = String(getMqttServer().c_str());
+    String mqttPortStr = String(getMqttPort().c_str());
 
     String html = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>";
     html += "<meta name='viewport' content='width=device-width, initial-scale=1.0'>";
@@ -70,13 +72,16 @@ static void handleRoot()
     html += "<input type=\"text\" id=\"field_wifi_ssid\" name=\"field_wifi_ssid\" value=\"" + ssidStr + "\"><br><br>";
     html += "<label for=\"field_wifi_pass\">WiFi Password: </label>";
     html += "<input type=\"password\" id=\"field_wifi_pass\" name=\"field_wifi_pass\" value=\"" + passStr + "\"><br><br>";
+    html += "<label for=\"field_mqtt_server\">MQTT Server: </label>";
+    html += "<input type=\"text\" id=\"field_mqtt_server\" name=\"field_mqtt_server\" value=\"" + mqttServerStr + "\"><br><br>";
+    html += "<label for=\"field_mqtt_port\">MQTT Port: </label>";
+    html += "<input type=\"text\" id=\"field_mqtt_port\" name=\"field_mqtt_port\" value=\"" + mqttPortStr + "\"><br><br>";
     html += "<input type=\"submit\" value=\"Submit\">";
     html += "</form><br>";
     html += "<button onclick=\"location.href='/shutdown'\">Shutdown Web Server</button>";
     html += "</body></html>";
 
     server.send(200, "text/html", html);
-
 }
 
 static void handleSubmit()
@@ -85,17 +90,23 @@ static void handleSubmit()
     String temp_device_interval;
     String temp_wifi_ssid;
     String temp_wifi_pass;
+    String temp_mqtt_server;
+    String temp_mqtt_port;
 
     if (server.method() == HTTP_POST) {
         temp_device_name = server.arg("field_dev_name");
         temp_device_interval = server.arg("field_dev_interval");
         temp_wifi_ssid = server.arg("field_wifi_ssid");
         temp_wifi_pass = server.arg("field_wifi_pass");
+        temp_mqtt_server = server.arg("field_mqtt_server");
+        temp_mqtt_port = server.arg("field_mqtt_port");
 
         Serial.println("WebServer Device name: " + temp_device_name);
         Serial.println("WebServer Device interval: " + temp_device_interval);
         Serial.println("WebServer WiFi SSID: " + temp_wifi_ssid);
         Serial.println("WebServer WiFi Password: " + temp_wifi_pass);
+        Serial.println("WebServer MQTT Server: " + temp_mqtt_server);
+        Serial.println("WebServer MQTT Port: " + temp_mqtt_port);
 
         String response = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>";
         response += "<meta name='viewport' content='width=device-width, initial-scale=1.0'>";
@@ -105,6 +116,8 @@ static void handleSubmit()
         response += "<p>Interval seconds: " + temp_device_interval + "</p>";
         response += "<p>WiFi SSID: " + temp_wifi_ssid + "</p>";
         response += "<p>WiFi Password: " + maskPassword(temp_wifi_pass) + "</p>";
+        response += "<p>MQTT Server: " + temp_mqtt_server + "</p>";
+        response += "<p>MQTT Port: " + temp_mqtt_port + "</p>";
         response += "<button onclick=\"location.href='/'\">Go to Main Page</button>";
         response += "<button onclick=\"location.href='/shutdown'\">Shutdown Web Server</button>";
         response += "</body></html>";
@@ -115,6 +128,8 @@ static void handleSubmit()
         setDeviceInterval(std::stoul(std::string(temp_device_interval.c_str())));
         setWiFiSSID(std::string(temp_wifi_ssid.c_str()));
         setWiFiPassword(std::string(temp_wifi_pass.c_str()));
+        setMqttServer(std::string(temp_mqtt_server.c_str()));
+        setMqttPort(std::string(temp_mqtt_port.c_str()));
     } else {
         server.send(405, "text/html", "<h1>405 Method Not Allowed</h1>");
     }
