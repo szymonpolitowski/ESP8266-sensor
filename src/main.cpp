@@ -2,6 +2,7 @@
 #include "app_wifi_web.hpp"
 #include "mem_flash.hpp"
 #include "wifi_sta.hpp"
+#include <PubSubClient.h>
 
 void setup() {
   delay(100);
