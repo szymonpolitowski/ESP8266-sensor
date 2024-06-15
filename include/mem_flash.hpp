@@ -3,8 +3,8 @@
 
 void initMemFlash(void);
 
-bool setDeviceName(std::string name);
-bool setDeviceInterval(std::string interval);
+void setDeviceName(std::string name);
+void setDeviceInterval(unsigned int interval);
 
-bool getDeviceName(std::string &name);
-bool getDeviceInterval(std::string &interval);
+std::string getDeviceName();
+unsigned int getDeviceInterval();
