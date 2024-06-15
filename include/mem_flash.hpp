@@ -7,10 +7,14 @@ void setDeviceName(std::string name);
 void setDeviceInterval(unsigned int interval);
 void setWiFiSSID(std::string ssid);
 void setWiFiPassword(std::string pass);
+void setMqttServer(std::string mqtt_s);
+void setMqttPort(std::string mqtt_p);
 
 std::string getDeviceName();
 unsigned int getDeviceInterval();
 std::string getWiFiSSID();
 std::string getWiFiPassword();
+std::string getMqttServer();
+std::string getMqttPort();
 
 // void testMemFlash();
