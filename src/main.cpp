@@ -2,9 +2,10 @@
 #include "app_wifi_web.hpp"
 #include "mem_flash.hpp"
 #include "wifi_sta.hpp"
-#include <PubSubClient.h>
+#include "app_mqtt.hpp"
 
-void setup() {
+void setup()
+{
   delay(100);
   Serial.begin(115200);
   while(!Serial);
@@ -16,11 +17,11 @@ void setup() {
   appWifiWebServer();
 
   wifiConnect();
-
+  mqttInit();
 }
 
-void loop() {
-
-  Serial.println("Running...");
-  delay(1000);
+void loop()
+{
+  mqttLoop();
+  delay(10);
 }
