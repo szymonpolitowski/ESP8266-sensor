@@ -52,18 +52,21 @@ static void initWifiAccessPoint(void)
 
 static void handleRoot() {
 
+    String nameStr = String(getDeviceName().c_str());
+    String intervalStr = String(std::to_string(getDeviceInterval()).c_str());
+
     String html = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>";
     html += "<meta name='viewport' content='width=device-width, initial-scale=1.0'>";
-    html += "<title>ESP8266 AP</title></head><body>";
-    html += "<h1>Welcome to ESP8266 Access Point</h1>";
+    html += "<title>ESP8266 Sensor AP</title></head><body>";
+    html += "<h1>ESP8266 Sensor config</h1>";
     html += "<form action=\"/submit\" method=\"POST\">";
     html += "<label for=\"field_dev_name\">Device name: </label>";
-    html += "<input type=\"text\" id=\"field_dev_name\" name=\"field_dev_name\"><br><br>";
+    html += "<input type=\"text\" id=\"field_dev_name\" name=\"field_dev_name\" value=\"" + nameStr + "\"><br><br>";
     html += "<label for=\"field_dev_interval\">Interval seconds: </label>";
-    html += "<input type=\"text\" id=\"field_dev_interval\" name=\"field_dev_interval\"><br><br>";
+    html += "<input type=\"text\" id=\"field_dev_interval\" name=\"field_dev_interval\" value=\"" + intervalStr + "\"><br><br>";
     html += "<input type=\"submit\" value=\"Submit\">";
     html += "</form><br>";
-    html += "<button onclick=\"location.href='/shutdown'\">Shutdown Server</button>";
+    html += "<button onclick=\"location.href='/shutdown'\">Shutdown Web Server</button>";
     html += "</body></html>";
 
     server.send(200, "text/html", html);
@@ -83,11 +86,11 @@ static void handleSubmit() {
         String response = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>";
         response += "<meta name='viewport' content='width=device-width, initial-scale=1.0'>";
         response += "<title>ESP8266 AP</title></head><body>";
-        response += "<h1>Data Received</h1>";
+        response += "<h1>Data has been stored in internal memory</h1>";
         response += "<p>Device name: " + temp_device_name + "</p>";
         response += "<p>Interval seconds: " + temp_device_interval + "</p>";
         response += "<button onclick=\"location.href='/'\">Go to Main Page</button>";
-        response += "<button onclick=\"location.href='/shutdown'\">Shutdown Server</button>";
+        response += "<button onclick=\"location.href='/shutdown'\">Shutdown Web Server</button>";
         response += "</body></html>";
 
         server.send(200, "text/html", response);
@@ -102,7 +105,7 @@ static void handleSubmit() {
 
 static void handleShutdown() {
     server.send(200, "text/html", "<h1>Server is shutting down...</h1>");
-    delay(1000); // Krótkie opóźnienie na wyświetlenie wiadomości
+    delay(1000); 
     server.stop();
     WiFi.softAPdisconnect(true);
     Serial.println("Server stopped and AP disconnected");
