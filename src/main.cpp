@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "app_wifi_web.hpp"
 #include "mem_flash.hpp"
+#include "wifi_sta.hpp"
 
 void setup() {
   delay(100);
@@ -12,6 +13,8 @@ void setup() {
   initMemFlash();
 
   appWifiWebServer();
+
+  wifiConnect();
 
 }
 
