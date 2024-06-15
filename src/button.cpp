@@ -17,6 +17,11 @@ void buttonInit(void)
     attachInterrupt(digitalPinToInterrupt(buttonPin), handleButtonInterrupt, CHANGE);
 }
 
+void buttonDeinit(void)
+{
+    detachInterrupt(digitalPinToInterrupt(buttonPin));
+}
+
 bool isButtonLongPressed(void)
 {
     if(buttonLongPressed)
