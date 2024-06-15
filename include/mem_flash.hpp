@@ -8,3 +8,5 @@ void setDeviceInterval(unsigned int interval);
 
 std::string getDeviceName();
 unsigned int getDeviceInterval();
+
+// void testMemFlash();
