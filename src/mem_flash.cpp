@@ -7,6 +7,7 @@
 #define DEFAULT_STR_WIFI_PASS           "TopSecretPassword"
 #define DEFAULT_STR_MQTT_SERVER         "192.168.0.2"
 #define DEFAULT_STR_MQTT_PORT           "1883"
+#define DEFAULT_STR_MQTT_MAIN_TOPIC     "sensor/"
 
 #define FILE_NAME_DEVICE_NAME           "/device_name.txt"
 #define FILE_NAME_DEVICE_INTERVAL       "/device_interval.txt"
@@ -14,6 +15,7 @@
 #define FILE_NAME_WIFI_PASS             "/device_wifi_pass.txt"
 #define FILE_NAME_MQTT_SERVER           "/device_mqtt_server.txt"
 #define FILE_NAME_MQTT_PORT             "/device_mqtt_port.txt"
+#define FILE_NAME_MQTT_MAIN_TOPIC       "/device_mqtt_main_topic.txt"
 
 static std::string device_name = DEFAULT_STR_DEVICE_NAME;
 static std::string device_interval = DEFAULT_STR_DEVICE_INTERVAL;
@@ -21,6 +23,7 @@ static std::string wifi_ssid = DEFAULT_STR_WIFI_SSID;
 static std::string wifi_pass = DEFAULT_STR_WIFI_PASS;
 static std::string mqtt_server = DEFAULT_STR_MQTT_SERVER;
 static std::string mqtt_port = DEFAULT_STR_MQTT_PORT;
+static std::string mqtt_main_topic = DEFAULT_STR_MQTT_MAIN_TOPIC;
 
 static bool mem_initialized = false;
 
@@ -71,6 +74,12 @@ void initMemFlash(void)
         mqtt_port = DEFAULT_STR_MQTT_PORT;
         writeToFile(FILE_NAME_MQTT_PORT, mqtt_port);
     }
+
+    if(!readFromFile(FILE_NAME_MQTT_MAIN_TOPIC, mqtt_main_topic))
+    {
+        mqtt_main_topic = DEFAULT_STR_MQTT_MAIN_TOPIC;
+        writeToFile(FILE_NAME_MQTT_MAIN_TOPIC, mqtt_main_topic);
+    }
 }
 
 void setDeviceName(std::string name)
@@ -108,6 +117,12 @@ void setMqttPort(std::string mqtt_p)
     writeToFile(FILE_NAME_MQTT_PORT, mqtt_port);
 }
 
+void setMqttMainTopic(std::string mqtt_mt)
+{
+    mqtt_main_topic = mqtt_mt;
+    writeToFile(FILE_NAME_MQTT_MAIN_TOPIC, mqtt_main_topic);
+}
+
 std::string getDeviceName()
 {
     return device_name;
@@ -135,6 +150,11 @@ std::string getMqttServer()
 std::string getMqttPort()
 {
     return mqtt_port;
+}
+
+std::string getMqttMainTopic()
+{
+    return mqtt_main_topic;
 }
 
 // void testMemFlash()
