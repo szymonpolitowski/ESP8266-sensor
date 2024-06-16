@@ -68,7 +68,7 @@ void mqttPublishTemperature(float temperature)
 {
     String tempStr = String(temperature, 1);
 
-    String topic = "sensor/";
+    String topic = getMqttMainTopic().c_str();
     topic += getDeviceName().c_str();
     topic += "/temperature";
 
@@ -79,7 +79,7 @@ void mqttPublishHumidity(float humidity)
 {
     String humStr = String(humidity, 1);
 
-    String topic = "sensor/";
+    String topic = getMqttMainTopic().c_str();
     topic += getDeviceName().c_str();
     topic += "/humidity";
 
@@ -90,7 +90,7 @@ void mqttPublishPressure(float pressure)
 {
     String preStr = String(pressure, 1);
 
-    String topic = "sensor/";
+    String topic = getMqttMainTopic().c_str();
     topic += getDeviceName().c_str();
     topic += "/pressure";
 
