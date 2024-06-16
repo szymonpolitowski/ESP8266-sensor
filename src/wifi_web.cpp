@@ -2,6 +2,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include "mem_flash.hpp"
+#include "utils.hpp"
 
 const char* ssid = "ESP8266_AP";
 const char* password = "12345678";
@@ -17,7 +18,6 @@ static void initWifiAccessPoint(void);
 static void handleRoot();
 static void handleSubmit();
 static void handleShutdown();
-static String maskPassword(String password);
 
 void initWifiWebServer(void)
 {
@@ -142,16 +142,4 @@ static void handleShutdown() {
     WiFi.softAPdisconnect(true);
     Serial.println("Server stopped and AP disconnected");
     web_status = false;
-}
-
-static String maskPassword(String password)
-{
-    unsigned int len = password.length();
-    String masked_password;
-    masked_password.clear();
-    for(unsigned int i = 0; i < len; i++)
-    {
-        masked_password += '*';
-    }
-    return masked_password;
 }
