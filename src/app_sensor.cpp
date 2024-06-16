@@ -20,8 +20,8 @@ void sensorSetInterval(unsigned int interval_s)
 
     sensor_interval = interval_s*1000;
     Serial.print("Measurement interval: ");
-    Serial.print(sensor_interval);
-    Serial.println("s")
+    Serial.print(interval_s);
+    Serial.println("s");
 }
 
 void sensorLoop()
