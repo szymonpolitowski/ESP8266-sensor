@@ -7,8 +7,7 @@
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-// static void sendTestMessage(void);
-// static unsigned long msg_timestamp;
+static void mqttPublish(String topic, String payload);
 
 void callback(char* topic, byte* message, unsigned int length) {
     Serial.print("Message arrived [");
@@ -43,24 +42,21 @@ void reconnect() {
     }
 }
 
+bool mqttServerConnected(void)
+{
+    return client.connected();
+}
+
 void mqttInit(void)
 {
     IPAddress addr_ip_mqtt_server;
     addr_ip_mqtt_server.fromString(getMqttServer().c_str());
     client.setServer(addr_ip_mqtt_server, (uint16_t)std::stoul(getMqttPort().c_str()));
     client.setCallback(callback);
-    
-    // msg_timestamp = millis();
 }
 
 void mqttLoop(void)
 {
-    // if(5000 < millis() - msg_timestamp)
-    // {
-    //     msg_timestamp = millis();
-    //     sendTestMessage();
-    // }
-
     if(!client.connected())
     {
         reconnect();
@@ -68,14 +64,42 @@ void mqttLoop(void)
     client.loop();
 }
 
-// static void sendTestMessage(void)
-// {
-//     String topic = "test/";
-//     topic += getDeviceName().c_str();
-//     topic += "/temperature";
-//     String payload = "25.6";
+void mqttPublishTemperature(float temperature)
+{
+    String tempStr = String(temperature, 1);
 
-//     client.publish(topic.c_str(), payload.c_str());
-//     Serial.println("MQTT Publish topic: " + topic);
-//     Serial.println("MQTT Publish payload: " + payload);
-// }
+    String topic = "sensor/";
+    topic += getDeviceName().c_str();
+    topic += "/temperature";
+
+    mqttPublish(topic, tempStr);
+}
+
+void mqttPublishHumidity(float humidity)
+{
+    String humStr = String(humidity, 1);
+
+    String topic = "sensor/";
+    topic += getDeviceName().c_str();
+    topic += "/humidity";
+
+    mqttPublish(topic, humStr);
+}
+
+void mqttPublishPressure(float pressure)
+{
+    String preStr = String(pressure, 1);
+
+    String topic = "sensor/";
+    topic += getDeviceName().c_str();
+    topic += "/pressure";
+
+    mqttPublish(topic, preStr);
+}
+
+static void mqttPublish(String topic, String payload)
+{
+    client.publish(topic.c_str(), payload.c_str());
+    Serial.print("MQTT Publish: " + payload);
+    Serial.println(" to topic: " + topic);
+}
