@@ -58,6 +58,7 @@ static void handleRoot()
     String passStr = String(getWiFiPassword().c_str());
     String mqttServerStr = String(getMqttServer().c_str());
     String mqttPortStr = String(getMqttPort().c_str());
+    String mqttMainTopicStr = String(getMqttMainTopic().c_str());
 
     String html = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>";
     html += "<meta name='viewport' content='width=device-width, initial-scale=1.0'>";
@@ -76,6 +77,8 @@ static void handleRoot()
     html += "<input type=\"text\" id=\"field_mqtt_server\" name=\"field_mqtt_server\" value=\"" + mqttServerStr + "\"><br><br>";
     html += "<label for=\"field_mqtt_port\">MQTT Port: </label>";
     html += "<input type=\"text\" id=\"field_mqtt_port\" name=\"field_mqtt_port\" value=\"" + mqttPortStr + "\"><br><br>";
+    html += "<label for=\"field_mqtt_main_topic\">MQTT Main Topic: </label>";
+    html += "<input type=\"text\" id=\"field_mqtt_main_topic\" name=\"field_mqtt_main_topic\" value=\"" + mqttMainTopicStr + "\"><br><br>";
     html += "<input type=\"submit\" value=\"Submit\">";
     html += "</form><br>";
     html += "<button onclick=\"location.href='/shutdown'\">Shutdown Web Server</button>";
@@ -92,6 +95,7 @@ static void handleSubmit()
     String temp_wifi_pass;
     String temp_mqtt_server;
     String temp_mqtt_port;
+    String temp_mqtt_main_topic;
 
     if (server.method() == HTTP_POST) {
         temp_device_name = server.arg("field_dev_name");
@@ -100,6 +104,7 @@ static void handleSubmit()
         temp_wifi_pass = server.arg("field_wifi_pass");
         temp_mqtt_server = server.arg("field_mqtt_server");
         temp_mqtt_port = server.arg("field_mqtt_port");
+        temp_mqtt_main_topic = server.arg("field_mqtt_main_topic");
 
         Serial.println("WebServer Device name: " + temp_device_name);
         Serial.println("WebServer Device interval: " + temp_device_interval);
@@ -107,6 +112,7 @@ static void handleSubmit()
         Serial.println("WebServer WiFi Password: " + temp_wifi_pass);
         Serial.println("WebServer MQTT Server: " + temp_mqtt_server);
         Serial.println("WebServer MQTT Port: " + temp_mqtt_port);
+        Serial.println("WebServer MQTT Main Topic: " + temp_mqtt_main_topic);
 
         String response = "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'>";
         response += "<meta name='viewport' content='width=device-width, initial-scale=1.0'>";
@@ -118,6 +124,7 @@ static void handleSubmit()
         response += "<p>WiFi Password: " + maskPassword(temp_wifi_pass) + "</p>";
         response += "<p>MQTT Server: " + temp_mqtt_server + "</p>";
         response += "<p>MQTT Port: " + temp_mqtt_port + "</p>";
+        response += "<p>MQTT Main Topic: " + temp_mqtt_main_topic + "</p>";
         response += "<button onclick=\"location.href='/'\">Go to Main Page</button>";
         response += "<button onclick=\"location.href='/shutdown'\">Shutdown Web Server</button>";
         response += "</body></html>";
@@ -130,6 +137,7 @@ static void handleSubmit()
         setWiFiPassword(std::string(temp_wifi_pass.c_str()));
         setMqttServer(std::string(temp_mqtt_server.c_str()));
         setMqttPort(std::string(temp_mqtt_port.c_str()));
+        setMqttMainTopic(std::string(temp_mqtt_main_topic.c_str()));
     } else {
         server.send(405, "text/html", "<h1>405 Method Not Allowed</h1>");
     }
