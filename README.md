@@ -24,7 +24,7 @@ The web server interface allows for easy sensor configuration. Configuration dat
 
 | Name | e.g. value | comment |
 |--|--|--|
-| Device name | bedroom | Name of the device |
+| Device name | dev_bedroom | Name of the device |
 | Interval seconds | 300 | Measurement publishing interval in seconds |
 | WiFi SSID | MyWifiSSID | Your Wifi SSID  |
 | WiFi Password | TopSecretPassword | Your Wifi Password |
@@ -49,9 +49,11 @@ The web server interface allows for easy sensor configuration. Configuration dat
 
 | Topic | Payload example |
 |--|--|
-| **MQTT Main Topic**/**Device name**/temperature | 21.3 |
-| **MQTT Main Topic**/**Device name**/humidity | 33.2 |
-| **MQTT Main Topic**/**Device name**/pressure | 1003.0 |
+| **MQTT_Main_Topic**/**Device name**/temperature | 21.3 |
+| **MQTT_Main_Topic**/**Device name**/humidity | 33.2 |
+| **MQTT_Main_Topic**/**Device name**/pressure | 1003.0 |
 
 - *MQTT Main Topic* is specified in the **Web Server Config**
 - *Device name* is specified in the **Web Server Config**
+
+In these example, the topic is: `sensor/dev_bedroom/`
